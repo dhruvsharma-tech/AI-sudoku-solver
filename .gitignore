@@ -1,0 +1,63 @@
+# ─────────────────────────────────────────────
+# Environment variables & secrets (CRITICAL)
+# ─────────────────────────────────────────────
+.env
+*.env
+.env.*
+!.env.example
+!.env.*.example
+
+# ─────────────────────────────────────────────
+# Python
+# ─────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+ENV/
+*.log
+temp_*
+test_input.png
+mnist_data/
+*.pth
+
+# ─────────────────────────────────────────────
+# Node.js
+# ─────────────────────────────────────────────
+**/node_modules/
+node-service/uploads/*
+!node-service/uploads/.gitkeep
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ─────────────────────────────────────────────
+# Java & Maven
+# ─────────────────────────────────────────────
+**/target/
+*.class
+*.jar
+*.war
+.mvn/
+mvnw
+mvnw.cmd
+
+# ─────────────────────────────────────────────
+# Frontend Build
+# ─────────────────────────────────────────────
+**/dist/
+**/dist-ssr/
+.oxlint-cache
+
+# ─────────────────────────────────────────────
+# IDE & System
+# ─────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.iml
+*.sublime-project
+*.sublime-workspace

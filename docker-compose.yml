@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+
+  # ─── Python Image Processing Service ───
+  python-service:
+    build: ./python-service
+    container_name: sudoku-python
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./python-service:/app    # Dev mein live reload ke liye
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ─── Java Sudoku Solver Service ───
+  java-service:
+    build: ./java-service
+    container_name: sudoku-java
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/sudoku/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ─── Node.js Orchestrator ───
+  node-service:
+    build: ./node-service
+    container_name: sudoku-node
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - PYTHON_SERVICE_URL=http://python-service:5000
+      - JAVA_SERVICE_URL=http://java-service:8080
+      - CORS_ORIGIN=http://localhost:80
+    depends_on:
+      - python-service
+      - java-service
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ─── React Frontend ───
+  frontend:
+    build: ./frontend
+    container_name: sudoku-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - node-service
+    restart: unless-stopped
